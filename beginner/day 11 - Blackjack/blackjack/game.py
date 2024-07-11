@@ -37,16 +37,7 @@ def blackjack():
         print(f"Your final hand: {player_deck}, final score: {sum(player_deck)}")
         print(f"Computer's final hand: {computer_deck}, final score: {sum(computer_deck)}")
 
-        if score_greater(computer_deck, BLACKJACK):
-            print("YOU WIN")
-        elif score_greater(player_deck, BLACKJACK):
-            print("YOU LOSE")
-        elif sum(player_deck) == sum(computer_deck):
-            print("DRAW")
-        elif player_score_closest_blackjack(player_deck, computer_deck):
-            print("YOU WIN")
-        else:
-            print("YOU LOSE")
+        print(result(player_deck, computer_deck))
             
         continue_playing = input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == "y"
     

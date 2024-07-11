@@ -24,3 +24,19 @@ def score_smaller(deck:list, num:int):
 
 def score_greater(deck:list, num:int):
     return sum(deck) > num
+
+def result(player_deck, computer_deck):
+    if score_greater(computer_deck, BLACKJACK):
+        return "Opponent went over. You win"
+    elif score_greater(player_deck, BLACKJACK):
+        return "You went over. You lose"
+    elif sum(player_deck) == sum(computer_deck):
+        return "Draw"
+    elif sum(player_deck) == 21:
+        return "Win with Blackjack"
+    elif sum(computer_deck) == 21:
+        return "Lose, opponent has Blackjack"
+    elif player_score_closest_blackjack(player_deck, computer_deck):
+        return "You win"
+    else:
+        return "You lose"
