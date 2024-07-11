@@ -1,8 +1,6 @@
 import os
 import random
-
-BLACKJACK = 21
-COMPUTER_SCORE_LIMIT = 18
+from .constants import BLACKJACK
 
 def clear():
     return os.system('clear')
@@ -12,7 +10,7 @@ def random_card():
     return random.choice(cards)
 
 def verify_ace(deck:list):
-    if 11 in deck and sum(deck) > BLACKJACK:
+    if deck[-1] == 11 and sum(deck) > BLACKJACK:
         deck.remove(11)
         deck.append(1)
 
@@ -21,11 +19,8 @@ def player_score_closest_blackjack(deck1:list, deck2:list):
     diff2 = BLACKJACK - sum(deck2)
     return min(diff1, diff2) == diff1
 
-def score_smaller_blackjack(deck:list):
-    return sum(deck) < BLACKJACK
+def score_smaller(deck:list, num:int):
+    return sum(deck) < num
 
-def score_smaller_limit(deck:list):
-    return sum(deck) < COMPUTER_SCORE_LIMIT
-
-def score_greater_blackjack(deck:list):
-    return sum(deck) > BLACKJACK
+def score_greater(deck:list, num:int):
+    return sum(deck) > num
