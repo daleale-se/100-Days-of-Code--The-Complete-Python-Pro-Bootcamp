@@ -69,10 +69,9 @@ def use_resources(drink_ingredients):
 
 def coffee_machine():
     is_on = True
-
+    profit = 0
     while is_on:
         clear()
-
         # TODO: Prompt user by asking "What would you like? (espresso/latte/cappuccino):".
         action = input("What would you like? (espresso/latte/cappuccino): ")
 
@@ -90,6 +89,7 @@ def coffee_machine():
                         change = amount - drink["cost"]
                         print("Here is ${:0.2f} dollars in change.".format(change))
                     # TODO: Making a drink deduct ingredients from the coffee machine resource.
+                    profit += drink["cost"]
                     use_resources(drink["ingredients"])
                     # TODO: When the drink is ready tell user "Here is your {drink}. Enjoy!"
                     print(f"Here is your {action}. Enjoy!")
@@ -97,16 +97,17 @@ def coffee_machine():
                     print("Sorry that's not enough money. Money refunded.")
         # TODO: Print a report with the current resource values when user enters "report".
         elif action == "report":
-            print(resources)
+            print(f"Water: {resources['water']}ml")
+            print(f"Milk: {resources['milk']}ml")
+            print(f"Coffee: {resources['coffee']}g")
+            print(f"Money: {profit}")
         # TODO: Turn off the coffee machine by entering "off" to the prompt.
         elif action == "off":
             is_on = False
 
 
 def main():
-
     coffee_machine()
-
     return 0
 
 
