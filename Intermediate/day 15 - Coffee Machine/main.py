@@ -88,7 +88,7 @@ def coffee_machine():
                     if amount > drink["cost"]:
                         change = amount - drink["cost"]
                         print("Here is ${:0.2f} dollars in change.".format(change))
-                    # TODO: Making a drink deduct ingredients from the coffee machine resource.
+                    # TODO: Making a drink deduct ingredients from the Coffee Machine resource.
                     profit += drink["cost"]
                     use_resources(drink["ingredients"])
                     # TODO: When the drink is ready tell user "Here is your {drink}. Enjoy!"
@@ -101,7 +101,7 @@ def coffee_machine():
             print(f"Milk: {resources['milk']}ml")
             print(f"Coffee: {resources['coffee']}g")
             print(f"Money: {profit}")
-        # TODO: Turn off the coffee machine by entering "off" to the prompt.
+        # TODO: Turn off the Coffee Machine by entering "off" to the prompt.
         elif action == "off":
             is_on = False
 
