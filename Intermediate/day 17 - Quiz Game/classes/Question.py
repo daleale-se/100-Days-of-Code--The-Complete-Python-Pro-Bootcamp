@@ -13,7 +13,7 @@ class Question:
     def print_correct_answer(self):
         print(f"The correct answer was: {self.__answer}")
 
-    def answer_question(self, guess, score):
+    def check_answer(self, guess, score):
         if self.is_correct(guess):
             print("You got it right!")
             score.increase()
