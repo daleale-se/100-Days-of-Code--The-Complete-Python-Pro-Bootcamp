@@ -1,4 +1,7 @@
+import time
 from turtle import Turtle
+from .Food import Food
+
 
 MOVE_FORWARD = 20
 UP = 90
@@ -34,17 +37,28 @@ class Snake:
         self.__head.forward(MOVE_FORWARD)
 
     def turn_up(self):
-        if self.__head.heading() != DOWN:
+        if self.__head.heading() != DOWN and self.__head.heading() != UP:
             self.__head.setheading(UP)
+            print("up")
 
     def turn_left(self):
-        if self.__head.heading() != RIGHT:
+        if self.__head.heading() != RIGHT and self.__head.heading() != LEFT:
             self.__head.setheading(LEFT)
+            print("left")
 
     def turn_down(self):
-        if self.__head.heading() != UP:
+        if self.__head.heading() != UP and self.__head.heading() != DOWN:
             self.__head.setheading(DOWN)
+            print("down")
 
     def turn_right(self):
-        if self.__head.heading() != LEFT:
+        if self.__head.heading() != LEFT and self.__head.heading() != RIGHT:
             self.__head.setheading(RIGHT)
+            print("right")
+
+    def eat(self, food: Food):
+        return food.was_eaten(self.__head)
+
+    def collides_wall(self):
+        return (self.__head.xcor() > 280) or (-280 > self.__head.ycor() > 280)
+

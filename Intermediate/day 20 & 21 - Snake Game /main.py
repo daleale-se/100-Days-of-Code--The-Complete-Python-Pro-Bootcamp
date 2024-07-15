@@ -1,5 +1,8 @@
 from turtle import Screen
 from classes.Snake import Snake
+from classes.Food import Food
+from classes.Score import Score
+
 import time
 
 # def snake_movement(snake: list[Turtle]):
@@ -16,13 +19,15 @@ import time
 def main():
 
     screen = Screen()
-    screen.setup(width=600, height=600)
+    screen.setup(width=600, height=800)
     screen.bgcolor("black")
     screen.title("Snake Py")
     screen.tracer(0)
     screen.delay(0)
 
     snake = Snake()
+    food = Food()
+    score = Score()
 
     screen.listen()
     screen.onkey(key="Up", fun=snake.turn_up)
@@ -36,6 +41,11 @@ def main():
         screen.update()
         time.sleep(.1)
         snake.move()
+        if snake.eat(food):
+            score.increase()
+            food.refresh()
+        elif snake.collides_wall():
+            in_game = False
 
     screen.exitonclick()
 
