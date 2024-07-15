@@ -19,7 +19,7 @@ import time
 def main():
 
     screen = Screen()
-    screen.setup(width=600, height=800)
+    screen.setup(width=600, height=600)
     screen.bgcolor("black")
     screen.title("Snake Py")
     screen.tracer(0)
@@ -39,13 +39,17 @@ def main():
     while in_game:
 
         screen.update()
-        time.sleep(.1)
+        time.sleep(.2)
         snake.move()
+
         if snake.eat(food):
+            snake.grow()
             score.increase()
             food.refresh()
-        elif snake.collides_wall():
+
+        if snake.collision_wall() or snake.collision_himself():
             in_game = False
+            score.game_over()
 
     screen.exitonclick()
 

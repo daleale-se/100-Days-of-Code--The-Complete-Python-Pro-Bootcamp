@@ -12,7 +12,7 @@ class Score(Turtle):
         super().__init__()
         self.color("white")
         self.penup()
-        self.goto(x=0, y=300)
+        self.goto(x=0, y=260)
         self.__update_score()
         self.hideturtle()
 
@@ -23,3 +23,7 @@ class Score(Turtle):
         self.__score += 1
         self.clear()
         self.__update_score()
+
+    def game_over(self):
+        self.home()
+        self.write(f"GAME OVER", False, ALIGNMENT, FONT)

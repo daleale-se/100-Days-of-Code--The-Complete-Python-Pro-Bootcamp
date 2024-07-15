@@ -1,7 +1,5 @@
-import time
 from turtle import Turtle
 from .Food import Food
-
 
 MOVE_FORWARD = 20
 UP = 90
@@ -20,15 +18,18 @@ class Snake:
     def __create_snake(self):
         x_pos = 0
         for _ in range(3):
-            t = Turtle("square")
-            t.penup()
-            t.speed(0)
-            t.pensize(20)
-            t.color("white")
-            t.goto(x=x_pos, y=0)
-            self.__segments.append(t)
+            self.__add_segment((x_pos, 0))
             x_pos -= MOVE_FORWARD
 
+    def __add_segment(self, pos):
+        t = Turtle("square")
+        t.penup()
+        t.speed("slow")
+        t.pensize(20)
+        t.color("white")
+        t.goto(pos)
+        self.__segments.append(t)
+    
     def move(self):
         for i in range(len(self.__segments) - 1, 0, -1):
             x_pos = self.__segments[i - 1].xcor()
@@ -39,26 +40,31 @@ class Snake:
     def turn_up(self):
         if self.__head.heading() != DOWN and self.__head.heading() != UP:
             self.__head.setheading(UP)
-            print("up")
 
     def turn_left(self):
         if self.__head.heading() != RIGHT and self.__head.heading() != LEFT:
             self.__head.setheading(LEFT)
-            print("left")
 
     def turn_down(self):
         if self.__head.heading() != UP and self.__head.heading() != DOWN:
             self.__head.setheading(DOWN)
-            print("down")
 
     def turn_right(self):
         if self.__head.heading() != LEFT and self.__head.heading() != RIGHT:
             self.__head.setheading(RIGHT)
-            print("right")
 
     def eat(self, food: Food):
         return food.was_eaten(self.__head)
 
-    def collides_wall(self):
-        return (self.__head.xcor() > 280) or (-280 > self.__head.ycor() > 280)
+    def collision_wall(self):
+        return ((280 < self.__head.xcor()) or (self.__head.xcor() < -280) or (280 < self.__head.ycor()) or
+                (self.__head.ycor() < -280))
 
+    def collision_himself(self):
+        for segment in self.__segments[1:]:
+            if self.__head.distance(segment) < 10:
+                return True
+        return False
+
+    def grow(self):
+        self.__add_segment(self.__segments[-1].position())
