@@ -25,7 +25,8 @@ class CarManager:
         car.goto(x=self.__random_x_pos(), y=self.__random_y_pos())
         self.__cars.append(car)
 
-    def __random_x_pos(self):
+    @staticmethod
+    def __random_x_pos():
         x_value = random.randint(100, 900)
         while x_value % 50 != 0:
             x_value = random.randint(100, 700)

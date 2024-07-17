@@ -10,8 +10,8 @@ def main():
     screen.tracer(0)
 
     player = Player()
-    car_manager = CarManager()
     scoreboard = Scoreboard()
+    car_manager = CarManager()
 
     screen.listen()
     screen.onkeypress(key="Up", fun=player.go_up)
@@ -30,13 +30,14 @@ def main():
             scoreboard.increase_level()
             scoreboard.update_level()
         if car_manager.collision(player):
-            player.go_start_position()
             car_manager.restart_speed()
-            scoreboard.restart_level()
+            game_is_on = False
         if player.ycor() < -280:
             player.stop_going_down()
-
         screen.update()
+
+    scoreboard.game_over()
+    screen.exitonclick()
 
 
 main()
