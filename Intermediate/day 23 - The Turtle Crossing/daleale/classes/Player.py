@@ -18,6 +18,9 @@ class Player(Turtle):
     def go_up(self):
         self.__speed = MOVE_DISTANCE
 
+    def go_down(self):
+        self.__speed = -MOVE_DISTANCE
+
     def stop(self):
         self.__speed = 0
 
@@ -26,3 +29,6 @@ class Player(Turtle):
 
     def go_start_position(self):
         self.goto(STARTING_POSITION)
+
+    def stop_going_down(self):
+        self.goto(x=0, y=-280)

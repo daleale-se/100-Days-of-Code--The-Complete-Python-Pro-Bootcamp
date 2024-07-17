@@ -1,7 +1,7 @@
-import time
 from turtle import Screen
 from classes.Player import Player
 from classes.CarManager import CarManager
+from classes.Scoreboard import Scoreboard
 
 
 def main():
@@ -11,22 +11,30 @@ def main():
 
     player = Player()
     car_manager = CarManager()
+    scoreboard = Scoreboard()
 
     screen.listen()
     screen.onkeypress(key="Up", fun=player.go_up)
     screen.onkeyrelease(key="Up", fun=player.stop)
+    screen.onkeypress(key="Down", fun=player.go_down)
+    screen.onkeyrelease(key="Down", fun=player.stop)
 
     game_is_on = True
     while game_is_on:
-        time.sleep(0.01)
         player.update_frame()
         car_manager.move()
         car_manager.refresh()
         if player.ycor() > 270:
             player.go_start_position()
             car_manager.increase_speed()
+            scoreboard.increase_level()
+            scoreboard.update_level()
         if car_manager.collision(player):
             player.go_start_position()
+            car_manager.restart_speed()
+            scoreboard.restart_level()
+        if player.ycor() < -280:
+            player.stop_going_down()
 
         screen.update()
 
