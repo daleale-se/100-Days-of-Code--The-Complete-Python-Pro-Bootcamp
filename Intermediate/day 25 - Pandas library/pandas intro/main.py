@@ -45,6 +45,7 @@ def main():
 
     data_d = pandas.DataFrame(data_dict)
     print(data_d)
+    data_d.to_csv("here.csv")
 
 
 main()
