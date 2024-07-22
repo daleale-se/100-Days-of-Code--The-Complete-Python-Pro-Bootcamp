@@ -2,6 +2,7 @@ import math
 from tkinter import Tk, Canvas, PhotoImage, Label, Button
 
 # ---------------------------- CONSTANTS ------------------------------- #
+
 LIGHT_PINK = "#FFCBCB"
 PINK = "#FFB1B1"
 BLUE = "#1679AB"
@@ -12,25 +13,34 @@ SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 CHECK_MARK = "✔"
 
-# ---------------------------- TIMER RESET ------------------------------- # 
-
-# ---------------------------- TIMER MECHANISM ------------------------------- # 
-
-# ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
-
-# ---------------------------- UI SETUP ------------------------------- #
-
 reps = 0
+timer = None
 
 
 def main():
 
+    # ---------------------------- TIMER RESET ------------------------------- #
+
+    def reset_timer():
+        window.after_cancel(timer)
+        canvas.itemconfig(timer_text, text=f"00:00")
+        title_label.config(text="Timer")
+        check_label.config(text="")
+        start_button.config(state="normal")
+        global reps
+        reps = 0
+
+    # ---------------------------- TIMER MECHANISM ------------------------------- #
+
     def start_timer():
         global reps
         reps += 1
+        print(reps)
         work_sec = WORK_MIN * 60
         short_break_sec = SHORT_BREAK_MIN * 60
         long_break_sec = LONG_BREAK_MIN * 60
+
+        start_button.config(state="disabled")
 
         if reps in [1, 3, 5, 7]:
             count_down(work_sec)
@@ -40,7 +50,9 @@ def main():
             title_label.config(text="Break Time")
         elif reps == 8:
             count_down(long_break_sec)
-            title_label.config(text="Long Break Time")
+            title_label.config(text="Long\nBreak Time")
+
+    # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 
     def count_down(count):
         minutes = math.floor(count / 60)
@@ -51,9 +63,15 @@ def main():
 
         canvas.itemconfig(timer_text, text=f"{minutes}:{seconds}")
         if count > 0:
-            window.after(1000, count_down, count - 1)
+            global timer
+            timer = window.after(1000, count_down, count - 1)
         elif count == 0:
             start_timer()
+            if reps % 2 == 0:
+                text = f"{CHECK_MARK*int(reps/2)}"
+                check_label.config(text=text)
+
+    # ---------------------------- UI SETUP ------------------------------- #
 
     window = Tk()
     window.title("Pomodoro")
@@ -71,13 +89,13 @@ def main():
 
     start_button = Button(text="start", bg=PINK, fg=DARK_BLUE, font=(FONT_NAME, 10, "bold"), highlightthickness=0,
                           command=start_timer)
-
     start_button.grid(column=0, row=2)
 
-    reset_button = Button(text="reset", bg=PINK, fg=DARK_BLUE, font=(FONT_NAME, 10, "bold"), highlightthickness=0)
+    reset_button = Button(text="reset", bg=PINK, fg=DARK_BLUE, font=(FONT_NAME, 10, "bold"), highlightthickness=0,
+                          command=reset_timer)
     reset_button.grid(column=2, row=2)
 
-    check_label = Label(text=f"{CHECK_MARK}", fg=BLUE, bg=LIGHT_PINK, font=(FONT_NAME, 20, "normal"))
+    check_label = Label(fg=BLUE, bg=LIGHT_PINK, font=(FONT_NAME, 20, "normal"))
     check_label.grid(column=1, row=3)
 
     window.mainloop()
