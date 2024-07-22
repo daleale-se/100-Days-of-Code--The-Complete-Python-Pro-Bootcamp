@@ -20,19 +20,40 @@ CHECK_MARK = "✔"
 
 # ---------------------------- UI SETUP ------------------------------- #
 
+reps = 0
+
 
 def main():
 
     def start_timer():
-        count_down(5 * 60)
+        global reps
+        reps += 1
+        work_sec = WORK_MIN * 60
+        short_break_sec = SHORT_BREAK_MIN * 60
+        long_break_sec = LONG_BREAK_MIN * 60
+
+        if reps in [1, 3, 5, 7]:
+            count_down(work_sec)
+            title_label.config(text="Work Time")
+        elif reps in [2, 4, 6]:
+            count_down(short_break_sec)
+            title_label.config(text="Break Time")
+        elif reps == 8:
+            count_down(long_break_sec)
+            title_label.config(text="Long Break Time")
 
     def count_down(count):
         minutes = math.floor(count / 60)
         seconds = count % 60
 
+        if seconds < 10:
+            seconds = f"0{seconds}"
+
         canvas.itemconfig(timer_text, text=f"{minutes}:{seconds}")
         if count > 0:
             window.after(1000, count_down, count - 1)
+        elif count == 0:
+            start_timer()
 
     window = Tk()
     window.title("Pomodoro")
