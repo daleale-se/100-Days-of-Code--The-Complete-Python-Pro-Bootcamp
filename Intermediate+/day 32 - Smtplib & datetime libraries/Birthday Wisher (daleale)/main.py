@@ -39,7 +39,7 @@ def main():
     now_month = now.month
     now_day = now.day
 
-    df = pandas.read_csv("./birthdays.csv")
+    df = pandas.read_csv("birthdays.csv")
     df = df[df.month == now_month]
     df = df[df.day == now_day]
 
