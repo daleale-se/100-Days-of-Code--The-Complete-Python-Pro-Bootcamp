@@ -2,8 +2,8 @@ import requests
 import os
 from twilio.rest import Client
 
-# i use export to set env variables but didn't work
-# i have to add environment variables in the run configurations at this file
+# I use export to set env variables but didn't work
+# I have to add environment variables in the run configurations at this file
 
 account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
 auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
