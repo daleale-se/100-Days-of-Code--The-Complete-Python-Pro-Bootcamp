@@ -22,21 +22,8 @@ def get_news():
     }
     response = requests.get(url=NEWS_URL, params=news_parameters)
     response.raise_for_status()
-    data = response.json()
-    return [
-        {
-            "title": data["articles"][0]["title"],
-            "description": data["articles"][0]["description"]
-        },
-        {
-            "title": data["articles"][1]["title"],
-            "description": data["articles"][1]["description"]
-        },
-        {
-            "title": data["articles"][2]["title"],
-            "description": data["articles"][2]["description"]
-        }
-    ]
+    data = response.json()["articles"]
+    return data[:3]
 
 
 # STEP 1: Use https://www.alphavantage.co
@@ -56,7 +43,7 @@ def get_stock_profit():
 
     response = requests.get(url=ALPHA_URL, params=alpha_parameters)
     response.raise_for_status()
-    data = response.json()
+    data = response.json()["Time Series (Daily)"]
 
     # except saturday and sunday
     now = datetime.now()
@@ -66,21 +53,21 @@ def get_stock_profit():
     yesterday = now.date() - timedelta(days=1)
     day_before_yesterday = yesterday - timedelta(days=1)
 
-    open_market = float(data["Time Series (Daily)"][str(yesterday)]["1. open"])
-    close_market = float(data["Time Series (Daily)"][str(day_before_yesterday)]["4. close"])
-    return round((open_market - close_market) / open_market * 100, 2)
+    close_yesterday_market = float(data[str(yesterday)]["4. close"])
+    close_before_yesterday_market = float(data[str(day_before_yesterday)]["4. close"])
+    return abs(round((close_yesterday_market - close_before_yesterday_market) / close_yesterday_market * 100, 2))
 
 # STEP 3: Use https://www.twilio.com
 # Send a seperate message with the percentage change and each article's title and description to your phone number.
 
 
-def send_message(title, description):
+def send_message(article):
 
     TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
     TWILIO_AUTH_KEY = os.getenv("TWILIO_AUTH_KEY")
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_KEY)
     message = client.messages.create(
-        body=f"\n{title}\n\n{description}",
+        body=article,
         from_='+12517662856',
         to='+541131821946')
     print(message.status)
@@ -88,10 +75,10 @@ def send_message(title, description):
 
 def main():
     percentage = get_stock_profit()
-    if percentage < -5 or 5 < percentage:
-        news = get_news()
-        for new in news:
-            send_message(new["title"], new["description"])
+    if 5 < percentage:
+        news_articles = [f"{new['title']}\n\n{new['description']}" for new in get_news()]
+        for article in news_articles:
+            send_message(article)
     else:
         print("The percentage was: ", percentage)
 
